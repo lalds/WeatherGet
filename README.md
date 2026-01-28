@@ -18,3 +18,9 @@
    ```bash
    git clone https://github.com/ВАШ_ЛОГИН/ВАШ_РЕПОЗИТОРИЙ.git
    cd ВАШ_РЕПОЗИТОРИЙ
+2. **Установите Зависимости:**
+   ```bash
+   pip install -r requirements.txt
+3. **Запустите**
+   ```bash
+   python WeatherGet.py либо же py WeatherGet.py
