@@ -1,0 +1,6 @@
+{
+    "city": "Moscow",
+    "pos": [100, 100],
+    "openweathermap_key": "YOUR_OPENWEATHERMAP_API_KEY",
+    "openrouter_key": "YOUR_OPENROUTER_API_KEY"
+}

@@ -42,6 +42,7 @@ class InfoWidget(QWidget):
         default_config = {
             "city": "Moscow",
             "pos": [100, 100],
+            "openweathermap_key": "",
             "openrouter_key": ""
         }
         if os.path.exists(self.config_path):
@@ -178,7 +179,10 @@ class InfoWidget(QWidget):
 
     def update_weather(self):
         city = self.config.get("city", "Moscow")
-        api_key = "e4a2cdc28404e413911f8e7d8ca9719e"
+        api_key = self.config.get("openweathermap_key", "")
+        if not api_key:
+            self.label_weather.setText("Введите OpenWeather API Key")
+            return
         
         # 1. Текущая погода
         url_now = f"http://api.openweathermap.org/data/2.5/weather?q={city}&appid={api_key}&units=metric&lang=ru"
@@ -272,6 +276,9 @@ class InfoWidget(QWidget):
         change_city_action = QAction("📍 Изменить город", self)
         change_city_action.triggered.connect(self.change_city)
         
+        set_openweather_key_action = QAction("🔑 Ввести OpenWeather Key", self)
+        set_openweather_key_action.triggered.connect(self.set_openweathermap_key)
+        
         set_key_action = QAction("🔑 Ввести OpenRouter Key", self)
         set_key_action.triggered.connect(self.set_api_key)
         
@@ -282,6 +289,7 @@ class InfoWidget(QWidget):
         exit_action.triggered.connect(QApplication.instance().quit)
         
         menu.addAction(change_city_action)
+        menu.addAction(set_openweather_key_action)
         menu.addAction(set_key_action)
         menu.addSeparator()
         menu.addAction(refresh_action)
@@ -298,9 +306,16 @@ class InfoWidget(QWidget):
             self.update_weather()
 
     def set_api_key(self):
-        key, ok = QInputDialog.getText(self, "API Key", "OpenRouter API Key:", text=self.config["openrouter_key"])
+        key, ok = QInputDialog.getText(self, "API Key", "OpenRouter API Key:", text=self.config.get("openrouter_key", ""))
         if ok:
             self.config["openrouter_key"] = key.strip()
+            self.save_config()
+            self.update_weather()
+
+    def set_openweathermap_key(self):
+        key, ok = QInputDialog.getText(self, "API Key", "OpenWeather API Key:", text=self.config.get("openweathermap_key", ""))
+        if ok:
+            self.config["openweathermap_key"] = key.strip()
             self.save_config()
             self.update_weather()
 
